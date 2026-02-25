@@ -61,7 +61,7 @@ button:hover{opacity:0.85; transform:scale(1.02);}
 <body>
 <header>
   حسابداری آریا پرداخت
-  <span id="walletIcon">👜</span>
+  <span id="walletIcon">💼</span>
 </header>
 
 <!-- کارت کیف -->
@@ -99,13 +99,13 @@ button:hover{opacity:0.85; transform:scale(1.02);}
     </select>
     <input type="text" id="amount" placeholder="مبلغ" oninput="handleAmountInput(this)">
     <input type="text" id="note" placeholder="بابت (اختیاری)" style="margin-bottom:10px;">
-    <button class="btn-success" onclick="addTransaction()">ثبت تراکنش ➕</button>
+    <button class="btn-success" onclick="addTransaction()">ثبت تراکنش </button>
   </div>
 </div>
 
 <div class="card">
-<h3>🔎 جستجو کاربران</h3>
-<input type="text" id="search" placeholder="جستجوی نام..." oninput="render()">
+<h3></h3>
+<input type="text" id="search" placeholder="جستجوی نام مشتری... " oninput="render()">
 </div>
 
 <div class="card">
@@ -118,7 +118,7 @@ button:hover{opacity:0.85; transform:scale(1.02);}
     <div style="margin-bottom:15px; font-weight:600;">انتخاب عملیات</div>
     <button id="btnOnlySave" class="btn-success" style="margin-bottom:10px;width:100%;">ثبت تراکنش</button>
     <button id="btnSaveShare" class="btn-success" style="margin-bottom:10px;width:100%;">ثبت و اشتراک گذاری</button>
-    <button id="btnCancel" class="btn-danger" style="width:100%;">لغو</button>
+    <button id="btnCancel" class="btn-danger" style="width:100%;">کنسل</button>
   </div>
 </div>
 
@@ -236,11 +236,11 @@ function saveTransaction(shareFlag){
             shareBox.style.textAlign = "center";
             shareBox.style.zIndex = 10000;
             shareBox.innerHTML = `
-                <div style="margin-bottom:10px; font-weight:600; color:#fff;">اشتراک گذاری تراکنش</div>
+                <div style="margin-bottom:10px; font-weight:600; color:#fff;">اشتراک گذاری تراکنش از طریق</div>
                 <a href="${tgLink}" target="_blank" style="display:block;margin:5px;padding:8px;background:#2AABEE;color:#fff;border-radius:8px;text-decoration:none;">تلگرام</a>
                 <a href="${waLink}" target="_blank" style="display:block;margin:5px;padding:8px;background:#25D366;color:#fff;border-radius:8px;text-decoration:none;">واتساپ</a>
                 <a href="${mailLink}" target="_blank" style="display:block;margin:5px;padding:8px;background:#FF5722;color:#fff;border-radius:8px;text-decoration:none;">ایمیل</a>
-                <button id="closeShare" style="margin-top:10px;padding:6px 10px;border:none;border-radius:6px;background:#ff5252;color:#fff;cursor:pointer;">بستن</button>
+                <button id="closeShare" style="margin-top:10px;padding:6px 10px;border:none;border-radius:6px;background:#ff5252;color:#fff;cursor:pointer;">کنسل</button>
             `;
             document.body.appendChild(shareBox);
             document.getElementById("closeShare").onclick = ()=>{ shareBox.remove(); };
@@ -256,9 +256,9 @@ box.style.display=box.style.display=="block"?"none":"block";
 
 function copyBalance(c){
 let historyText=c.transactions.map(t=>`${t.type=="deposit"?"➕":"➖"} ${t.amount.toFixed(2)} - ${t.date}${t.note?(" بابت: "+t.note):""}`).join("\n");
-let fullText=`مشتری: ${c.name}\nموجودی: ${c.balance.toFixed(2)}\n\nتاریخچه تراکنش‌ها:\n${historyText}\n\nحسابداری آریا پرداخت`;
+let fullText=`مشتری: ${c.name}\nموجودی: ${c.balance.toFixed(2)}\n\nسابقه تراکنش‌ها:\n${historyText}\n\nحسابداری آریا پرداخت`;
 navigator.clipboard.writeText(fullText);
-alert("کاپی شد با تاریخچه!");
+alert("کاپی شد با سابقه!");
 }
 
 document.getElementById("walletIcon").onclick = function(e){
