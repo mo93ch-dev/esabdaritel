@@ -285,7 +285,7 @@ box.style.display=box.style.display=="block"?"none":"block";
 
 function copyBalance(c){
 let historyText=c.transactions.map(t=>`${t.type=="deposit"?"➕":"➖"} ${t.amount.toFixed(2)} - ${t.date}${t.note?(" بابت: "+t.note):""}`).join("\n");
-let fullText=`مشتری: ${c.name}\nموجودی: ${c.balance.toFixed(2)}\n\nسابقه تراکنش‌ها:\n${historyText}\n\nحسابداری آریا پرداخت`;
+let fullText=`مشتری گرامی: ${c.name}\nموجودی: ${c.balance.toFixed(2)}\n\nسابقه تراکنش‌ها:\n${historyText}\n\nحسابداری آریا پرداخت`;
 navigator.clipboard.writeText(fullText);
 alert("کاپی شد با سابقه!");
 }
