@@ -56,9 +56,30 @@ button:hover{opacity:0.85; transform:scale(1.02);}
 }
 .walletLabel {font-size:14px; color:var(--muted);}
 .walletValue {font-weight:700; font-size:16px;}
+.close-btn {
+  position: fixed;
+  top: 15px;
+  left: 15px;
+  background: red;
+  color: white;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  font-weight: bold;
+  text-decoration: none;
+  z-index: 9999;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  transition: 0.2s;
+}
+.close-btn:hover { background: darkred; transform: scale(1.1); }
 </style>
 </head>
 <body>
+
 <header>
   حسابداری آریا پرداخت
   <span id="walletIcon">💼</span>
@@ -121,6 +142,8 @@ button:hover{opacity:0.85; transform:scale(1.02);}
     <button id="btnCancel" class="btn-danger" style="width:100%;">کنسل</button>
   </div>
 </div>
+
+<a href="https://mo93ch-dev.github.io/Aryapardakhttel" class="close-btn">✖</a>
 
 <script>
 let customers=JSON.parse(localStorage.getItem("DarkTelegramProAccounting"))||[];
@@ -217,35 +240,41 @@ function saveTransaction(shareFlag){
                    `مبلغ باقی مانده: ${c.balance.toFixed(2)} (${status})\n\n` +
                    `حسابداری آریا پرداخت`;
 
-        if(navigator.share){
-            navigator.share({title:"تراکنش حسابداری", text:text})
-            .catch(()=>{ navigator.clipboard.writeText(text); alert("اشتراک‌گذاری انجام نشد، متن کپی شد."); });
-        } else {
-            let encodedText = encodeURIComponent(text);
-            let tgLink = `https://t.me/share/url?url=&text=${encodedText}`;
-            let waLink = `https://api.whatsapp.com/send?text=${encodedText}`;
-            let mailLink = `mailto:?subject=تراکنش حسابداری&body=${encodedText}`;
-            let shareBox = document.createElement("div");
-            shareBox.style.position = "fixed";
-            shareBox.style.top = "50%";
-            shareBox.style.left = "50%";
-            shareBox.style.transform = "translate(-50%, -50%)";
-            shareBox.style.background = "#17212b";
-            shareBox.style.padding = "15px";
-            shareBox.style.borderRadius = "12px";
-            shareBox.style.textAlign = "center";
-            shareBox.style.zIndex = 10000;
-            shareBox.innerHTML = `
-                <div style="margin-bottom:10px; font-weight:600; color:#fff;">اشتراک گذاری تراکنش از طریق</div>
-                <a href="${tgLink}" target="_blank" style="display:block;margin:5px;padding:8px;background:#2AABEE;color:#fff;border-radius:8px;text-decoration:none;">تلگرام</a>
-                <a href="${waLink}" target="_blank" style="display:block;margin:5px;padding:8px;background:#25D366;color:#fff;border-radius:8px;text-decoration:none;">واتساپ</a>
-                <a href="${mailLink}" target="_blank" style="display:block;margin:5px;padding:8px;background:#FF5722;color:#fff;border-radius:8px;text-decoration:none;">ایمیل</a>
-                <button id="closeShare" style="margin-top:10px;padding:6px 10px;border:none;border-radius:6px;background:#ff5252;color:#fff;cursor:pointer;">کنسل</button>
-            `;
-            document.body.appendChild(shareBox);
-            document.getElementById("closeShare").onclick = ()=>{ shareBox.remove(); };
-        }
+        let encodedText = encodeURIComponent(text);
+        let smsLink = `sms:?body=${encodedText}`;
+        let waLink = `https://api.whatsapp.com/send?text=${encodedText}`;
+        let tgLink = `https://t.me/share/url?url=&text=${encodedText}`;
+        let mailLink = `mailto:?subject=تراکنش حسابداری&body=${encodedText}`;
+
+        let shareBox = document.createElement("div");
+        shareBox.style.position = "fixed";
+        shareBox.style.top = "50%";
+        shareBox.style.left = "50%";
+        shareBox.style.transform = "translate(-50%, -50%)";
+        shareBox.style.background = "#17212b";
+        shareBox.style.padding = "15px";
+        shareBox.style.borderRadius = "12px";
+        shareBox.style.textAlign = "center";
+        shareBox.style.zIndex = 10000;
+
+        shareBox.innerHTML = `
+        <div style="margin-bottom:10px; font-weight:600; color:#fff;">اشتراک گذاری از طریق</div>
+        <a href="${smsLink}" target="_blank" style="display:block;margin:5px;padding:8px;background:#FF9800;color:#fff;border-radius:8px;text-decoration:none;">پیامک</a>
+        <a href="${waLink}" target="_blank" style="display:block;margin:5px;padding:8px;background:#25D366;color:#fff;border-radius:8px;text-decoration:none;">واتساپ</a>
+        <a href="${tgLink}" target="_blank" style="display:block;margin:5px;padding:8px;background:#2AABEE;color:#fff;border-radius:8px;text-decoration:none;">تلگرام</a>
+        <a href="${mailLink}" target="_blank" style="display:block;margin:5px;padding:8px;background:#FF5722;color:#fff;border-radius:8px;text-decoration:none;">ایمیل</a>
+        <button id="btnCopyDetails" style="display:block;margin:5px;padding:8px;background:#607D8B;color:#fff;border-radius:8px;border:none;cursor:pointer;">کپی جزئیات</button>
+        <button id="closeShare" style="margin-top:10px;padding:6px 10px;border:none;border-radius:6px;background:#ff5252;color:#fff;cursor:pointer;">کنسل</button>
+        `;
+
+        document.body.appendChild(shareBox);
+        document.getElementById("closeShare").onclick = () => { shareBox.remove(); };
+        document.getElementById("btnCopyDetails").onclick = () => {
+            navigator.clipboard.writeText(text);
+            alert("متن تراکنش کپی شد!");
+        };
     }
+
     window.tempTransaction = null;
 }
 
@@ -312,33 +341,3 @@ render();
 </script>
 </body>
 </html>
-حسابداری آریا پرداخت
-<!-- دکمه ضربدر -->
-<a href="https://mo93ch-dev.github.io/Aryapardakhttel" class="close-btn">✖</a>
-
-<style>
-.close-btn {
-  position: fixed;
-  top: 15px;
-  left: 15px; /* تغییر دادیم به چپ */
-  background: red;
-  color: white;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 22px;
-  font-weight: bold;
-  text-decoration: none;
-  z-index: 9999;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-  transition: 0.2s;
-}
-
-.close-btn:hover {
-  background: darkred;
-  transform: scale(1.1);
-}
-</style>
